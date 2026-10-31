@@ -50,3 +50,27 @@ El componente ProfileCard recibe por props name, role e image, y no contiene dat
 
 &#x20;   npx expo start
 
+
+
+\## Checkpoint 3: Formulario de creación de tareas
+
+
+
+Rama de trabajo: feature/add-task-form
+
+
+
+\- AddTaskScreen: formulario con título, descripción y categoría.
+
+\- Componentes controlados con useState (value + onChangeText).
+
+\- Validaciones: título obligatorio (mín. 5 caracteres), descripción obligatoria (mín. 10 caracteres) y categoría seleccionada por defecto.
+
+\- Los errores aparecen debajo de cada campo después de tocar el campo o intentar guardar.
+
+\- El borde del input cambia de color en foco o con error.
+
+\- Al guardar, se muestra un Alert, se imprime la tarea en consola y el formulario se limpia.
+
+\- KeyboardAvoidingView evita que el teclado tape los campos.
+

@@ -8,4 +8,5 @@ export const colors = {
   border: '#E5E7EB',
   success: '#16A34A',
   successLight: '#DCFCE7',
+  danger: '#DC2626',
 };
