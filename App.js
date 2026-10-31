@@ -1,10 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import AddTaskScreen from './src/screens/AddTaskScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 export default function App() {
   return (
     <>
-      <AddTaskScreen />
+      <HomeScreen />
       <StatusBar style="dark" />
     </>
   );

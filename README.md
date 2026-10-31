@@ -74,3 +74,28 @@ Rama de trabajo: feature/add-task-form
 
 \- KeyboardAvoidingView evita que el teclado tape los campos.
 
+
+
+
+\## Checkpoint 4: Lista con detalle y estados vacíos
+
+
+
+Rama de trabajo: feature/task-detail
+
+
+
+\- HomeScreen guarda el arreglo de tareas y el estado selectedTask.
+
+\- El formulario (TaskForm) agrega las tareas nuevas a la lista.
+
+\- FlatList muestra las tareas; cada una se puede marcar como completada.
+
+\- Estado vacío (EmptyState) cuando no hay tareas, mediante ListEmptyComponent.
+
+\- Al tocar una tarea se muestra TaskDetailScreen (título, estado, categoría, fecha y descripción).
+
+\- El botón "Volver" (y el botón atrás de Android) regresa a la lista.
+
+\- El botón "Eliminar" borra la tarea y vuelve a la lista.
+
