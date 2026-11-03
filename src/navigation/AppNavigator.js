@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { Text } from 'react-native';
 
 import TaskListScreen from '../screens/TaskListScreen';
 import TaskDetailScreen from '../screens/TaskDetailScreen';
@@ -17,18 +18,7 @@ function TaskListStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerShown: true,
-        headerStyle: {
-          backgroundColor: colors.background,
-          borderBottomWidth: 1,
-          borderBottomColor: colors.border,
-        },
-        headerTintColor: colors.primary,
-        headerTitleStyle: {
-          fontWeight: 'bold',
-          fontSize: 18,
-        },
-        headerShadowVisible: false,
+        headerShown: false,
       }}
     >
       <Stack.Screen
@@ -64,7 +54,7 @@ function AppTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({ focused, color }) => {
           let iconName;
 
           if (route.name === 'Home') {
@@ -73,22 +63,10 @@ function AppTabs() {
             iconName = focused ? 'person' : 'person-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName} size={24} color={color} />;
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          borderTopWidth: 1,
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 60,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-        },
       })}
     >
       <Tab.Screen
