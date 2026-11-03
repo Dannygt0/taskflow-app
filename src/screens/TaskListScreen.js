@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -5,10 +6,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTask, toggleTaskStatus } from '../store/slices/tasksSlice';
+import { listenToUserTasks } from '../services/taskService';
+import { setTasks, loadUserTasks } from '../store/slices/tasksSlice';
+import { toggleTaskStatusAsync } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
 import EmptyState from '../components/EmptyState';
@@ -19,20 +23,40 @@ export default function TaskListScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const tasks = useSelector((state) => state.tasks.items);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+  const user = useSelector((state) => state.auth.user);
 
-  const handleAddTask = (formData) => {
-    dispatch(addTask(formData));
-  };
+  useEffect(() => {
+    if (!user) return;
+
+    // Configurar listener en tiempo real
+    const unsubscribe = listenToUserTasks(user.uid, (updatedTasks) => {
+      dispatch(setTasks(updatedTasks));
+    });
+
+    return unsubscribe;
+  }, [user, dispatch]);
 
   const handleSelectTask = (task) => {
-    navigation.navigate('TaskDetail', { taskId: task.id, task });
+    navigation.navigate('TaskDetail', { taskId: task.id });
   };
 
-  const handleToggleTask = (id) => {
-    dispatch(toggleTaskStatus(id));
+  const handleToggleTask = (task) => {
+    dispatch(toggleTaskStatusAsync({
+      taskId: task.id,
+      currentStatus: task.completed,
+    }));
   };
 
   const pendingCount = tasks.filter((task) => !task.completed).length;
+
+  if (isLoading && tasks.length === 0) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -49,13 +73,13 @@ export default function TaskListScreen() {
           <TaskItem
             task={item}
             onPress={() => handleSelectTask(item)}
-            onToggle={() => handleToggleTask(item.id)}
+            onToggle={() => handleToggleTask(item)}
           />
         )}
         ListHeaderComponent={
           <View>
             <Text style={styles.appTitle}>TaskFlow</Text>
-            <TaskForm onAddTask={handleAddTask} />
+            <TaskForm userId={user?.uid} />
             <View style={styles.listHeader}>
               <Text style={styles.sectionTitle}>Mis tareas</Text>
               {tasks.length > 0 ? (
@@ -83,6 +107,12 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingTop: spacing.xl * 2,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.background,
   },
   appTitle: {
     fontSize: 32,

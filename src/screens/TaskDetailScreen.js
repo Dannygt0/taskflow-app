@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleTaskStatus, deleteTask } from '../store/slices/tasksSlice';
+import { toggleTaskStatusAsync, deleteTaskAsync } from '../store/slices/tasksSlice';
 import { colors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
 
@@ -37,12 +37,16 @@ export default function TaskDetailScreen() {
   }
 
   const handleToggle = () => {
-    dispatch(toggleTaskStatus(taskId));
+    dispatch(toggleTaskStatusAsync({
+      taskId,
+      currentStatus: task.completed,
+    }));
   };
 
   const handleDelete = () => {
-    dispatch(deleteTask(taskId));
-    navigation.goBack();
+    dispatch(deleteTaskAsync(taskId)).then(() => {
+      navigation.goBack();
+    });
   };
 
   return (

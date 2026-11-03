@@ -6,8 +6,8 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux';
-import { addTask } from '../store/slices/tasksSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTaskAsync } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import { colors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
@@ -15,10 +15,17 @@ import { spacing, radius } from '../constants/spacing';
 export default function TaskFormScreen() {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
 
   const handleAddTask = (formData) => {
-    dispatch(addTask(formData));
-    navigation.navigate('TaskList');
+    if (user) {
+      dispatch(addTaskAsync({
+        userId: user.uid,
+        taskData: formData,
+      })).then(() => {
+        navigation.navigate('TaskList');
+      });
+    }
   };
 
   return (
