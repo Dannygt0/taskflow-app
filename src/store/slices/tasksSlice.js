@@ -64,9 +64,8 @@ const tasksSlice = createSlice({
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(addTaskAsync.fulfilled, (state, action) => {
+      .addCase(addTaskAsync.fulfilled, (state) => {
         state.isLoading = false;
-        state.items.unshift(action.payload);
       })
       .addCase(addTaskAsync.rejected, (state, action) => {
         state.isLoading = false;

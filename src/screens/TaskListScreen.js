@@ -11,7 +11,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import { listenToUserTasks } from '../services/taskService';
-import { setTasks, loadUserTasks } from '../store/slices/tasksSlice';
+import { setTasks, addTaskAsync } from '../store/slices/tasksSlice';
 import { toggleTaskStatusAsync } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
@@ -39,6 +39,11 @@ export default function TaskListScreen() {
 
   const handleSelectTask = (task) => {
     navigation.navigate('TaskDetail', { taskId: task.id });
+  };
+
+  const handleAddTask = (formData) => {
+    if (!user) return;
+    dispatch(addTaskAsync({ userId: user.uid, taskData: formData }));
   };
 
   const handleToggleTask = (task) => {
@@ -79,7 +84,7 @@ export default function TaskListScreen() {
         ListHeaderComponent={
           <View>
             <Text style={styles.appTitle}>TaskFlow</Text>
-            <TaskForm userId={user?.uid} />
+            <TaskForm onAddTask={handleAddTask} />
             <View style={styles.listHeader}>
               <Text style={styles.sectionTitle}>Mis tareas</Text>
               {tasks.length > 0 ? (
