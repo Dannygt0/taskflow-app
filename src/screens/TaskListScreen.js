@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   View,
   Text,
@@ -6,9 +5,10 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTask, toggleTaskStatus } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
 import EmptyState from '../components/EmptyState';
@@ -17,11 +17,11 @@ import { spacing } from '../constants/spacing';
 
 export default function TaskListScreen() {
   const navigation = useNavigation();
-  const [tasks, setTasks] = useState([]);
+  const dispatch = useDispatch();
+  const tasks = useSelector((state) => state.tasks.items);
 
-  const handleAddTask = (newTask) => {
-    setTasks((prev) => [newTask, ...prev]);
-    navigation.navigate('TaskList');
+  const handleAddTask = (formData) => {
+    dispatch(addTask(formData));
   };
 
   const handleSelectTask = (task) => {
@@ -29,15 +29,7 @@ export default function TaskListScreen() {
   };
 
   const handleToggleTask = (id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const handleDeleteTask = (id) => {
-    setTasks((prev) => prev.filter((task) => task.id !== id));
+    dispatch(toggleTaskStatus(id));
   };
 
   const pendingCount = tasks.filter((task) => !task.completed).length;

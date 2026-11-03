@@ -6,6 +6,8 @@ import {
   ScrollView,
   StyleSheet,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleTaskStatus, deleteTask } from '../store/slices/tasksSlice';
 import { colors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
 
@@ -20,9 +22,26 @@ function formatDate(isoString) {
 export default function TaskDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { task } = route.params;
+  const dispatch = useDispatch();
+  const { taskId } = route.params;
+  const task = useSelector((state) =>
+    state.tasks.items.find((t) => t.id === taskId)
+  );
+
+  if (!task) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.notFound}>Tarea no encontrada</Text>
+      </View>
+    );
+  }
+
+  const handleToggle = () => {
+    dispatch(toggleTaskStatus(taskId));
+  };
 
   const handleDelete = () => {
+    dispatch(deleteTask(taskId));
     navigation.goBack();
   };
 
@@ -72,6 +91,24 @@ export default function TaskDetailScreen() {
       </View>
 
       <TouchableOpacity
+        style={[
+          styles.toggleButton,
+          task.completed ? styles.toggleButtonActive : styles.toggleButtonInactive,
+        ]}
+        onPress={handleToggle}
+        activeOpacity={0.7}
+      >
+        <Text
+          style={[
+            styles.toggleButtonText,
+            task.completed ? styles.toggleButtonTextActive : styles.toggleButtonTextInactive,
+          ]}
+        >
+          {task.completed ? '✓ Marcar como pendiente' : 'Marcar como completada'}
+        </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
         style={styles.deleteButton}
         onPress={handleDelete}
         activeOpacity={0.7}
@@ -90,6 +127,13 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingTop: spacing.xl * 2,
+  },
+  notFound: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    color: colors.textMuted,
+    marginTop: spacing.xl * 2,
   },
   backButton: {
     alignSelf: 'flex-start',
@@ -165,8 +209,34 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: spacing.sm,
   },
-  deleteButton: {
+  toggleButton: {
     marginTop: spacing.lg,
+    paddingVertical: spacing.md,
+    borderRadius: radius.md,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  toggleButtonActive: {
+    backgroundColor: colors.successLight,
+    borderColor: colors.success,
+  },
+  toggleButtonInactive: {
+    borderColor: colors.primary,
+    backgroundColor: colors.background,
+  },
+  toggleButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  toggleButtonTextActive: {
+    color: colors.success,
+  },
+  toggleButtonTextInactive: {
+    color: colors.primary,
+  },
+  deleteButton: {
+    marginTop: spacing.md,
     paddingVertical: spacing.md,
     borderRadius: radius.md,
     borderWidth: 1.5,

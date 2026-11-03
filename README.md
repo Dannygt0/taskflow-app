@@ -2,6 +2,38 @@
 
 Aplicación móvil de gestión de tareas desarrollada con React Native y Expo (Managed Workflow).
 
+## Checkpoint 6: Estado global migrado a Redux Toolkit
+
+### Objetivo
+Centralizar la gestión del estado de tareas utilizando Redux Toolkit para sincronizar datos entre pantallas.
+
+### Arquitectura Redux
+
+**Store Structure:**
+- `tasksSlice`: contiene el estado de tareas y filtros
+  - `items`: array de tareas
+  - `filter`: estado del filtro actual ('all', 'completed', 'pending')
+
+**Reducers implementados:**
+- `addTask(formData)`: agrega nueva tarea con ID único
+- `toggleTaskStatus(taskId)`: marca/desmarca tarea como completada
+- `deleteTask(taskId)`: elimina tarea del store
+- `setFilter(filterType)`: actualiza filtro global
+
+**Integración:**
+- `App.js`: envuelto con `<Provider store={store}>`
+- Todas las pantallas usan `useSelector` para leer estado
+- `useDispatch` para ejecutar acciones
+
+### Características
+
+✅ Estado centralizado en Redux  
+✅ Sincronización instantánea entre pantallas  
+✅ Tareas persisten al navegar  
+✅ Toggle de estado en pantalla de detalle  
+✅ Eliminación de tareas desde detalle  
+✅ Sin useState para datos de tareas  
+
 ## Checkpoint 5: Navegación consolidada con React Navigation
 
 ### Objetivo

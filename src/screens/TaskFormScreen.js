@@ -6,16 +6,18 @@ import {
   ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { addTask } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import { colors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
 
 export default function TaskFormScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  const handleAddTask = (newTask) => {
-    // Aquí podrías hacer la lógica de agregar la tarea
-    // Por ahora, simplemente navegamos de vuelta a la lista
+  const handleAddTask = (formData) => {
+    dispatch(addTask(formData));
     navigation.navigate('TaskList');
   };
 
