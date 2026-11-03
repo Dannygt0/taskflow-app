@@ -2,6 +2,58 @@
 
 Aplicación móvil de gestión de tareas desarrollada con React Native y Expo (Managed Workflow).
 
+## Checkpoint 7: Autenticación y Persistencia con Firebase
+
+### Objetivo
+Implementar autenticación con Firebase Auth y persistencia de datos en Firestore.
+
+### Configuración de Firebase
+
+**1. Crea un proyecto en Firebase Console:**
+- Entra a https://console.firebase.google.com
+- Crea nuevo proyecto "taskflow-app"
+- Habilita Authentication (Email/Password)
+- Crea una base de datos Firestore
+
+**2. Obtén tus credenciales:**
+- Ve a Project Settings → General
+- Copia el objeto `firebaseConfig`
+- Reemplaza los valores en `src/config/firebaseConfig.js`
+
+**3. Estructura de Firestore:**
+```
+tasks (collection)
+├── userId (field)
+├── title (field)
+├── description (field)
+├── category (field)
+├── completed (field)
+└── createdAt (field)
+```
+
+### Flujo de Autenticación
+
+1. **Login/Register**: Pantallas con Firebase Auth
+2. **Persistencia de sesión**: `onAuthStateChanged` mantiene sesión activa
+3. **Rutas protegidas**: Solo usuarios autenticados ven tareas
+4. **Auth Slice**: Redux maneja estado del usuario
+
+### CRUD en Firestore
+
+- **Create**: `createTask()` - Guarda tarea con userId
+- **Read**: `listenToUserTasks()` - Listener en tiempo real
+- **Update**: `updateTask()` - Actualiza completed/datos
+- **Delete**: `deleteTask()` - Elimina tarea de Firestore
+
+### Características
+
+✅ Autenticación con email/password  
+✅ Persistencia de sesión  
+✅ Rutas protegidas  
+✅ Tareas sincronizadas en tiempo real  
+✅ Datos separados por usuario  
+✅ Validación de errores  
+
 ## Checkpoint 6: Estado global migrado a Redux Toolkit
 
 ### Objetivo
