@@ -3,14 +3,13 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// Reemplaza con tus credenciales de Firebase
 const firebaseConfig = {
-  apiKey: 'AIzaSyDummyKeyReplace_WITH_YOUR_API_KEY',
-  authDomain: 'taskflow-app-replace.firebaseapp.com',
-  projectId: 'taskflow-app-replace',
-  storageBucket: 'taskflow-app-replace.appspot.com',
-  messagingSenderId: '123456789',
-  appId: '1:123456789:web:abcdef123456789',
+  apiKey: 'AIzaSyBJKnZVYpvjybfIOl9G46LKQIRIAArLFgk',
+  authDomain: 'taskflow-app-718c3.firebaseapp.com',
+  projectId: 'taskflow-app-718c3',
+  storageBucket: 'taskflow-app-718c3.firebasestorage.app',
+  messagingSenderId: '718520116872',
+  appId: '1:718520116872:web:75cc14358e43468894613d',
 };
 
 // Initialize Firebase
