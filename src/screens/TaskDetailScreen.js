@@ -1,16 +1,14 @@
-import { useEffect } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import {
   View,
   Text,
   TouchableOpacity,
   ScrollView,
-  BackHandler,
   StyleSheet,
 } from 'react-native';
 import { colors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
 
-// Convierte la fecha ISO a formato dd/mm/aaaa hh:mm
 function formatDate(isoString) {
   const date = new Date(isoString);
   const pad = (n) => String(n).padStart(2, '0');
@@ -19,19 +17,22 @@ function formatDate(isoString) {
   )}:${pad(date.getMinutes())}`;
 }
 
-export default function TaskDetailScreen({ task, onBack, onDelete }) {
-  // En Android, el botón físico "atrás" también vuelve a la lista
-  useEffect(() => {
-    const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
-      onBack();
-      return true;
-    });
-    return () => subscription.remove();
-  }, [onBack]);
+export default function TaskDetailScreen() {
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { task } = route.params;
+
+  const handleDelete = () => {
+    navigation.goBack();
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <TouchableOpacity style={styles.backButton} onPress={onBack} activeOpacity={0.7}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}
+        activeOpacity={0.7}
+      >
         <Text style={styles.backText}>‹ Volver</Text>
       </TouchableOpacity>
 
@@ -72,7 +73,7 @@ export default function TaskDetailScreen({ task, onBack, onDelete }) {
 
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => onDelete(task.id)}
+        onPress={handleDelete}
         activeOpacity={0.7}
       >
         <Text style={styles.deleteText}>Eliminar tarea</Text>

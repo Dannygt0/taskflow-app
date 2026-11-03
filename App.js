@@ -1,10 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import HomeScreen from './src/screens/HomeScreen';
+import 'react-native-gesture-handler';
+import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
   return (
     <>
-      <HomeScreen />
+      <AppNavigator />
       <StatusBar style="dark" />
     </>
   );
