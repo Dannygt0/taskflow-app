@@ -76,7 +76,6 @@ export default function TaskForm({ onAddTask }) {
       createdAt: new Date().toISOString(),
     };
 
-    console.log('Nueva tarea capturada:', newTask);
     onAddTask(newTask);
     Alert.alert('Éxito', 'Tarea agregada a tu lista');
     resetForm();
@@ -197,7 +196,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   chipTextSelected: {
-    color: colors.surface,
+    color: '#FFFFFF',
   },
   errorText: {
     color: colors.danger,
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   buttonText: {
-    color: colors.surface,
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },

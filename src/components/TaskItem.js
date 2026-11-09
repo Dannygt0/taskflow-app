@@ -1,10 +1,12 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { colors } from '../constants/colors';
+import { colors, categoryColors } from '../constants/colors';
 import { spacing, radius } from '../constants/spacing';
 
 // Ítem de la lista: tocar la tarjeta abre el detalle,
 // tocar el círculo marca o desmarca la tarea como completada.
 export default function TaskItem({ task, onPress, onToggle }) {
+  const categoryColor = categoryColors[task.category] ?? colors.textMuted;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.7}>
       <TouchableOpacity
@@ -22,7 +24,9 @@ export default function TaskItem({ task, onPress, onToggle }) {
         >
           {task.title}
         </Text>
-        <Text style={styles.category}>{task.category}</Text>
+        <View style={[styles.categoryPill, { backgroundColor: `${categoryColor}22` }]}>
+          <Text style={[styles.category, { color: categoryColor }]}>{task.category}</Text>
+        </View>
       </View>
 
       <Text style={styles.chevron}>›</Text>
@@ -58,7 +62,7 @@ const styles = StyleSheet.create({
     borderColor: colors.success,
   },
   checkmark: {
-    color: colors.surface,
+    color: '#FFFFFF',
     fontSize: 14,
     fontWeight: 'bold',
   },
@@ -75,10 +79,16 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
     color: colors.textMuted,
   },
+  categoryPill: {
+    alignSelf: 'flex-start',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: radius.full,
+    marginTop: spacing.xs,
+  },
   category: {
-    fontSize: 13,
-    color: colors.textMuted,
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: '600',
   },
   chevron: {
     fontSize: 26,

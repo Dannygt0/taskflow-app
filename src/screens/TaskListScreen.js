@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { LinearGradient } from 'expo-linear-gradient';
 import { listenToUserTasks } from '../services/taskService';
 import { setTasks, addTaskAsync } from '../store/slices/tasksSlice';
 import { toggleTaskStatusAsync } from '../store/slices/tasksSlice';
 import TaskForm from '../components/TaskForm';
 import TaskItem from '../components/TaskItem';
 import EmptyState from '../components/EmptyState';
-import { colors } from '../constants/colors';
+import { colors, gradients } from '../constants/colors';
 import { spacing } from '../constants/spacing';
 
 export default function TaskListScreen() {
@@ -83,7 +84,14 @@ export default function TaskListScreen() {
         )}
         ListHeaderComponent={
           <View>
-            <Text style={styles.appTitle}>TaskFlow</Text>
+            <LinearGradient
+              colors={gradients.pop}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.titleBanner}
+            >
+              <Text style={styles.appTitle}>TaskFlow</Text>
+            </LinearGradient>
             <TaskForm onAddTask={handleAddTask} />
             <View style={styles.listHeader}>
               <Text style={styles.sectionTitle}>Mis tareas</Text>
@@ -119,11 +127,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background,
   },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: colors.primary,
+  titleBanner: {
+    borderRadius: 16,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.lg,
+    alignSelf: 'flex-start',
     marginBottom: spacing.lg,
+  },
+  appTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
   listHeader: {
     flexDirection: 'row',

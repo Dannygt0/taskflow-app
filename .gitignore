@@ -31,7 +31,17 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+
+# firebase credentials
+src/config/firebaseConfig.js
+google-services.json
+GoogleService-Info.plist
+serviceAccountKey*.json
+
+# local claude settings
+.claude/settings.local.json
 
 # typescript
 *.tsbuildinfo

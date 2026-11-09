@@ -102,7 +102,7 @@ export default function LoginScreen() {
         activeOpacity={0.8}
       >
         {isLoading ? (
-          <ActivityIndicator color={colors.surface} />
+          <ActivityIndicator color="#FFFFFF" />
         ) : (
           <Text style={styles.buttonText}>Iniciar Sesión</Text>
         )}
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   buttonText: {
-    color: colors.surface,
+    color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',
   },

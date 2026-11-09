@@ -1,189 +1,117 @@
 # TaskFlow
 
-Aplicación móvil de gestión de tareas desarrollada con React Native y Expo (Managed Workflow).
+Aplicación móvil de gestión de tareas con React Native y Expo. Cada usuario tiene sus propias tareas y su foto de perfil, sincronizadas en la nube con Firebase.
 
-## Checkpoint 7: Autenticación y Persistencia con Firebase
+## Características
 
-### Objetivo
-Implementar autenticación con Firebase Auth y persistencia de datos en Firestore.
+- Registro e inicio de sesión con email y contraseña (Firebase Auth)
+- Sesión persistente: al reabrir la app seguís logueado
+- Crear, completar, ver detalle y eliminar tareas (Firestore, en tiempo real)
+- Tareas separadas por usuario
+- Perfil con foto tomada de la galería (expo-image-picker), guardada en Firebase Storage
+- Estado global con Redux Toolkit
+- Navegación con Bottom Tabs (Tareas, Perfil) y Stack (lista, detalle, formulario, login)
 
-### Configuración de Firebase
+## Requisitos
 
-**1. Crea un proyecto en Firebase Console:**
-- Entra a https://console.firebase.google.com
-- Crea nuevo proyecto "taskflow-app"
-- Habilita Authentication (Email/Password)
-- Crea una base de datos Firestore
+- Node.js 20 o superior
+- App **Expo Go** instalada en tu teléfono (Android o iOS)
+- Un proyecto de Firebase con Authentication, Firestore y Storage habilitados
 
-**2. Obtén tus credenciales:**
-- Ve a Project Settings → General
-- Copia el objeto `firebaseConfig`
-- Reemplaza los valores en `src/config/firebaseConfig.js`
-
-**3. Estructura de Firestore:**
-```
-tasks (collection)
-├── userId (field)
-├── title (field)
-├── description (field)
-├── category (field)
-├── completed (field)
-└── createdAt (field)
-```
-
-### Flujo de Autenticación
-
-1. **Login/Register**: Pantallas con Firebase Auth
-2. **Persistencia de sesión**: `onAuthStateChanged` mantiene sesión activa
-3. **Rutas protegidas**: Solo usuarios autenticados ven tareas
-4. **Auth Slice**: Redux maneja estado del usuario
-
-### CRUD en Firestore
-
-- **Create**: `createTask()` - Guarda tarea con userId
-- **Read**: `listenToUserTasks()` - Listener en tiempo real
-- **Update**: `updateTask()` - Actualiza completed/datos
-- **Delete**: `deleteTask()` - Elimina tarea de Firestore
-
-### Características
-
-✅ Autenticación con email/password  
-✅ Persistencia de sesión  
-✅ Rutas protegidas  
-✅ Tareas sincronizadas en tiempo real  
-✅ Datos separados por usuario  
-✅ Validación de errores  
-
-## Checkpoint 6: Estado global migrado a Redux Toolkit
-
-### Objetivo
-Centralizar la gestión del estado de tareas utilizando Redux Toolkit para sincronizar datos entre pantallas.
-
-### Arquitectura Redux
-
-**Store Structure:**
-- `tasksSlice`: contiene el estado de tareas y filtros
-  - `items`: array de tareas
-  - `filter`: estado del filtro actual ('all', 'completed', 'pending')
-
-**Reducers implementados:**
-- `addTask(formData)`: agrega nueva tarea con ID único
-- `toggleTaskStatus(taskId)`: marca/desmarca tarea como completada
-- `deleteTask(taskId)`: elimina tarea del store
-- `setFilter(filterType)`: actualiza filtro global
-
-**Integración:**
-- `App.js`: envuelto con `<Provider store={store}>`
-- Todas las pantallas usan `useSelector` para leer estado
-- `useDispatch` para ejecutar acciones
-
-### Características
-
-✅ Estado centralizado en Redux  
-✅ Sincronización instantánea entre pantallas  
-✅ Tareas persisten al navegar  
-✅ Toggle de estado en pantalla de detalle  
-✅ Eliminación de tareas desde detalle  
-✅ Sin useState para datos de tareas  
-
-## Checkpoint 5: Navegación consolidada con React Navigation
-
-### Objetivo
-Integrar una navegación profesional usando React Navigation con estructura anidada:
-- **BottomTabNavigator**: navegación por pestañas (Tareas / Perfil)
-- **NativeStackNavigator**: flujo de tareas dentro de la pestaña Home
-  - TaskListScreen: lista de tareas
-  - TaskDetailScreen: detalle de una tarea
-  - TaskFormScreen: crear nueva tarea
-
-### Arquitectura de Navegación
-
-```
-AppNavigator (NavigationContainer)
-└── AppTabs (BottomTabNavigator)
-    ├── Home (Tab)
-    │   └── TaskListStack (NativeStackNavigator)
-    │       ├── TaskList (initialRoute)
-    │       ├── TaskDetail
-    │       └── TaskForm
-    └── Profile (Tab)
-        └── ProfileScreen
-```
-
-### Características implementadas
-
-1. **Navegación por Pestañas**: 
-   - Pestaña "Tareas" con icono de home
-   - Pestaña "Perfil" con icono de persona
-   - Iconos dinámicos según el estado (enfocado/desenfocado)
-
-2. **Flujo de Tareas**:
-   - Seleccionar una tarea navega a TaskDetailScreen con parámetros
-   - El detalle recibe el objeto completo de la tarea vía `route.params`
-   - Botón "Volver" usa `navigation.goBack()`
-   - Crear nueva tarea ejecuta `navigation.navigate('TaskForm')`
-
-3. **Paso de Parámetros**:
-   - `navigation.navigate('TaskDetail', { taskId, task })`
-   - `useRoute()` para capturar los parámetros en TaskDetailScreen
-
-4. **Interactividad**:
-   - Tocar una tarea abre el detalle
-   - Checkbox marca/desmarca sin navegar
-   - Botones de navegación funcionan correctamente
-
-### Estructura de carpetas
-
-```
-/src
-  /navigation
-    AppNavigator.js       ← Configuración principal de navegación
-  /screens
-    TaskListScreen.js     ← Lista con FlatList
-    TaskDetailScreen.js   ← Detalle con parámetros
-    TaskFormScreen.js     ← Formulario envuelto en Stack
-    ProfileScreen.js      ← Perfil de usuario
-  /components
-    TaskForm.js           ← Formulario de creación
-    TaskItem.js           ← Ítem de lista
-    EmptyState.js         ← Estado vacío
-    FormInput.js          ← Input controlado
-    ProfileCard.js        ← Tarjeta de perfil
-    StatusBadge.js        ← Badge de estado
-  /constants
-    colors.js             ← Paleta de colores
-    spacing.js            ← Espaciados y radios
-```
-
-### Dependencias principales
-
-- `@react-navigation/native` - Contenedor de navegación
-- `@react-navigation/bottom-tabs` - Navegador de pestañas
-- `@react-navigation/native-stack` - Stack Navigator
-- `react-native-gesture-handler` - Manejo de gestos
-- `react-native-reanimated` - Animaciones
-- `@expo/vector-icons` - Iconos (Ionicons)
-
-### Ejecutar localmente
+## Instalación
 
 ```bash
-git clone https://github.com/usuario/taskflow-app.git
-cd taskflow-app
 npm install
-npx expo start
-
-# Escanear con Expo Go o ejecutar en emulador
 ```
 
-### Próximos pasos
+### Configurar Firebase
 
-- **Módulo 6 (Redux Toolkit)**: Centralizar estado de tareas en un store global
-- **Módulo 7 (Firebase)**: Persistencia de datos y autenticación
-- **Módulo 8 (Pulido final)**: Transiciones, cámara, preparación para producción
+1. Copiá el archivo de ejemplo:
+   ```bash
+   cp src/config/firebaseConfig.example.js src/config/firebaseConfig.js
+   ```
+2. En Firebase Console → Configuración del proyecto → Tus apps, copiá el objeto `firebaseConfig` y reemplazá los valores en `src/config/firebaseConfig.js`.
+3. Habilitá **Authentication → Email/Password**.
+4. Creá la base de datos **Firestore** y pegá estas reglas en *Rules*:
+   ```
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /tasks/{taskId} {
+         allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+         allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+       }
+       match /users/{userId} {
+         allow read, write: if request.auth != null && request.auth.uid == userId;
+       }
+     }
+   }
+   ```
+5. Habilitá **Storage** y pegá estas reglas en *Rules*:
+   ```
+   rules_version = '2';
+   service firebase.storage {
+     match /b/{bucket}/o {
+       match /avatars/{file} {
+         allow read: if request.auth != null;
+         allow write: if request.auth != null && file == request.auth.uid + '.jpg';
+       }
+     }
+   }
+   ```
 
-### Notas de desarrollo
+`src/config/firebaseConfig.js` no se sube al repositorio (está en `.gitignore`), por eso hay que crearlo en cada copia del proyecto.
 
-- Las tareas se guardan en estado local (`useState`). Para persistencia permanente, usar Redux + Firebase en próximos módulos
-- La navegación gestiona automáticamente el header nativo en iOS/Android
-- Los parámetros se pasan explícitamente en cada `navigate()` para mayor control
-- `useNavigation()` y `useRoute()` se usan en los componentes de pantalla para acceder a funciones de navegación
+### Ejecutar
+
+```bash
+npx expo start
+```
+
+Escaneá el código QR con Expo Go (Android) o con la cámara (iOS). Para ver cambios en vivo, dejá la terminal abierta.
+
+## Estructura
+
+```
+src/
+├── components/     Componentes reutilizables (TaskItem, TaskForm, ProfileCard, ...)
+├── config/         Inicialización de Firebase (Auth, Firestore, Storage)
+├── constants/      Paleta de colores, degradados y espaciados
+├── navigation/     Navegadores: Auth, Tabs y Stack de tareas
+├── screens/        Pantallas
+├── services/       Acceso a Firestore (tareas) y Storage (avatar)
+└── store/          Redux Toolkit: store y slices de auth y tareas
+```
+
+## Modelo de datos
+
+```
+tasks/{taskId}
+├── userId        (string)  uid del dueño
+├── title         (string)
+├── description   (string)
+├── category      (string)  Personal | Trabajo | Estudio
+├── completed     (boolean)
+└── createdAt     (string, ISO 8601)
+
+users/{uid}
+└── avatarUrl     (string)  URL de la foto en Storage
+
+Storage: avatars/{uid}.jpg
+```
+
+## Capturas
+
+<!-- Agregar capturas o un GIF del flujo: login, lista de tareas, detalle y perfil -->
+
+## Build y publicación
+
+Para compartir la app con Expo Go hay que publicar una actualización:
+
+```bash
+npx eas-cli@latest login
+npx eas-cli@latest init
+npx eas-cli@latest update --branch production --message "Entrega final"
+```
+
+El link de Expo Go queda en `https://expo.dev/@<tu-usuario>/taskflow-app`.
