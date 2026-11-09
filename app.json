@@ -22,6 +22,18 @@
     },
     "plugins": [
       "expo-status-bar"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "9db490e5-e44e-4468-8600-f078da6c0573"
+      }
+    },
+    "owner": "dannygt",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/9db490e5-e44e-4468-8600-f078da6c0573"
+    }
   }
 }

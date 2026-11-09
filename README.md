@@ -88,7 +88,9 @@ users/{uid}
 
 ## Capturas
 
-<!-- Agregar capturas o un GIF del flujo: login, lista de tareas, detalle y perfil -->
+| Login | Lista de tareas | Detalle | Perfil |
+|---|---|---|---|
+| ![Login](docs/screenshots/login.jpg) | ![Lista](docs/screenshots/lista.jpg) | ![Detalle](docs/screenshots/detalles.jpg) | ![Perfil](docs/screenshots/perfil.jpg) |
 
 ## Build y publicación
 
@@ -100,4 +102,8 @@ npx eas-cli@latest init
 npx eas-cli@latest update --branch production --message "Entrega final"
 ```
 
-El link de Expo Go queda en `https://expo.dev/@<tu-usuario>/taskflow-app`.
+## Link de la app
+
+Proyecto publicado en Expo: https://expo.dev/accounts/dannygt/projects/taskflow-app
+
+Abrí ese proyecto desde Expo Go para probar la última versión publicada.
