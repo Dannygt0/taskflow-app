@@ -21,7 +21,7 @@ export const createTask = async (userId, taskData) => {
       userId,
       createdAt: new Date().toISOString(),
     });
-    return { id: docRef.id, ...taskData, userId };
+    return { ...taskData, id: docRef.id, userId };
   } catch (error) {
     console.error('Error creando tarea:', error);
     throw error;
@@ -39,8 +39,8 @@ export const getUserTasks = async (userId) => {
     const tasks = [];
     querySnapshot.forEach((doc) => {
       tasks.push({
-        id: doc.id,
         ...doc.data(),
+        id: doc.id,
       });
     });
     return tasks;
@@ -61,8 +61,8 @@ export const listenToUserTasks = (userId, callback) => {
       const tasks = [];
       querySnapshot.forEach((doc) => {
         tasks.push({
-          id: doc.id,
           ...doc.data(),
+          id: doc.id,
         });
       });
       callback(tasks);
