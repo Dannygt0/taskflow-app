@@ -54,12 +54,18 @@ export default function LoginScreen() {
       }));
     } catch (error) {
       let errorMessage = 'Error al iniciar sesión';
-      if (error.code === 'auth/user-not-found') {
-        errorMessage = 'Usuario no encontrado';
-      } else if (error.code === 'auth/wrong-password') {
-        errorMessage = 'Contraseña incorrecta';
+      if (
+        error.code === 'auth/invalid-credential' ||
+        error.code === 'auth/user-not-found' ||
+        error.code === 'auth/wrong-password'
+      ) {
+        errorMessage = 'Email o contraseña incorrectos. Revisá los datos o registrate si no tenés cuenta.';
       } else if (error.code === 'auth/invalid-email') {
-        errorMessage = 'Email inválido';
+        errorMessage = 'El email no tiene un formato válido.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Demasiados intentos fallidos. Esperá unos minutos e intentá de nuevo.';
+      } else if (error.code === 'auth/network-request-failed') {
+        errorMessage = 'Sin conexión. Revisá tu internet e intentá de nuevo.';
       }
       dispatch(setError(errorMessage));
       Alert.alert('Error', errorMessage);
