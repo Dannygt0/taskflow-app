@@ -107,3 +107,5 @@ npx eas-cli@latest update --branch production --message "Entrega final"
 Proyecto publicado en Expo: https://expo.dev/accounts/dannygt/projects/taskflow-app
 
 Abrí ese proyecto desde Expo Go para probar la última versión publicada.
+
+Versión web: https://taskflow-app-three-sigma.vercel.app
