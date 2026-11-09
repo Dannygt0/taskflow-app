@@ -44,6 +44,7 @@ export default function ProfileScreen() {
         localUri: result.assets[0].uri,
       })).unwrap();
     } catch (error) {
+      console.error('Error subiendo avatar:', error?.code, error?.message);
       Alert.alert('Error', 'No se pudo guardar la foto. Revisá tu conexión e intentá de nuevo.');
     } finally {
       setIsUploading(false);

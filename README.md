@@ -8,7 +8,7 @@ Aplicación móvil de gestión de tareas con React Native y Expo. Cada usuario t
 - Sesión persistente: al reabrir la app seguís logueado
 - Crear, completar, ver detalle y eliminar tareas (Firestore, en tiempo real)
 - Tareas separadas por usuario
-- Perfil con foto tomada de la galería (expo-image-picker), guardada en Firebase Storage
+- Perfil con foto tomada de la galería (expo-image-picker), reducida y guardada en Firestore
 - Estado global con Redux Toolkit
 - Navegación con Bottom Tabs (Tareas, Perfil) y Stack (lista, detalle, formulario, login)
 
@@ -16,7 +16,7 @@ Aplicación móvil de gestión de tareas con React Native y Expo. Cada usuario t
 
 - Node.js 20 o superior
 - App **Expo Go** instalada en tu teléfono (Android o iOS)
-- Un proyecto de Firebase con Authentication, Firestore y Storage habilitados
+- Un proyecto de Firebase con Authentication y Firestore habilitados
 
 ## Instalación
 
@@ -28,9 +28,9 @@ npm install
 
 1. Copiá el archivo de ejemplo:
    ```bash
-   cp src/config/firebaseConfig.example.js src/config/firebaseConfig.js
+   cp .env.example .env
    ```
-2. En Firebase Console → Configuración del proyecto → Tus apps, copiá el objeto `firebaseConfig` y reemplazá los valores en `src/config/firebaseConfig.js`.
+2. En Firebase Console → Configuración del proyecto → Tus apps, copiá los valores de `firebaseConfig` y completá cada variable en `.env`.
 3. Habilitá **Authentication → Email/Password**.
 4. Creá la base de datos **Firestore** y pegá estas reglas en *Rules*:
    ```
@@ -47,20 +47,8 @@ npm install
      }
    }
    ```
-5. Habilitá **Storage** y pegá estas reglas en *Rules*:
-   ```
-   rules_version = '2';
-   service firebase.storage {
-     match /b/{bucket}/o {
-       match /avatars/{file} {
-         allow read: if request.auth != null;
-         allow write: if request.auth != null && file == request.auth.uid + '.jpg';
-       }
-     }
-   }
-   ```
 
-`src/config/firebaseConfig.js` no se sube al repositorio (está en `.gitignore`), por eso hay que crearlo en cada copia del proyecto.
+El archivo `.env` no se sube al repositorio (está en `.gitignore`), por eso hay que crearlo en cada copia del proyecto. Las variables `EXPO_PUBLIC_*` quedan incluidas en el bundle de la app, así que no son secretas en sentido estricto: la seguridad real la dan las reglas de Firestore.
 
 ### Ejecutar
 
@@ -75,11 +63,11 @@ Escaneá el código QR con Expo Go (Android) o con la cámara (iOS). Para ver ca
 ```
 src/
 ├── components/     Componentes reutilizables (TaskItem, TaskForm, ProfileCard, ...)
-├── config/         Inicialización de Firebase (Auth, Firestore, Storage)
+├── config/         Inicialización de Firebase (Auth, Firestore)
 ├── constants/      Paleta de colores, degradados y espaciados
 ├── navigation/     Navegadores: Auth, Tabs y Stack de tareas
 ├── screens/        Pantallas
-├── services/       Acceso a Firestore (tareas) y Storage (avatar)
+├── services/       Acceso a Firestore (tareas y avatar)
 └── store/          Redux Toolkit: store y slices de auth y tareas
 ```
 
@@ -95,9 +83,7 @@ tasks/{taskId}
 └── createdAt     (string, ISO 8601)
 
 users/{uid}
-└── avatarUrl     (string)  URL de la foto en Storage
-
-Storage: avatars/{uid}.jpg
+└── avatarData    (string)  Foto de perfil como data URI JPEG (256 px)
 ```
 
 ## Capturas

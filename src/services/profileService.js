@@ -1,22 +1,26 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { db, storage } from '../config/firebaseConfig';
+import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
+import { db } from '../config/firebaseConfig';
 
 const USERS_COLLECTION = 'users';
+const AVATAR_SIZE = 256;
 
 export const uploadAvatar = async (userId, localUri) => {
-  const response = await fetch(localUri);
-  const blob = await response.blob();
+  const context = ImageManipulator.manipulate(localUri);
+  context.resize({ width: AVATAR_SIZE });
+  const rendered = await context.renderAsync();
+  const { base64 } = await rendered.saveAsync({
+    format: SaveFormat.JPEG,
+    compress: 0.7,
+    base64: true,
+  });
 
-  const avatarRef = ref(storage, `avatars/${userId}.jpg`);
-  await uploadBytes(avatarRef, blob, { contentType: 'image/jpeg' });
-  const avatarUrl = await getDownloadURL(avatarRef);
-
-  await setDoc(doc(db, USERS_COLLECTION, userId), { avatarUrl }, { merge: true });
-  return avatarUrl;
+  const avatarData = `data:image/jpeg;base64,${base64}`;
+  await setDoc(doc(db, USERS_COLLECTION, userId), { avatarData }, { merge: true });
+  return avatarData;
 };
 
-export const getAvatarUrl = async (userId) => {
+export const getAvatar = async (userId) => {
   const snapshot = await getDoc(doc(db, USERS_COLLECTION, userId));
-  return snapshot.exists() ? snapshot.data().avatarUrl ?? null : null;
+  return snapshot.exists() ? snapshot.data().avatarData ?? null : null;
 };

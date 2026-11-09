@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { uploadAvatar, getAvatarUrl } from '../../services/profileService';
+import { uploadAvatar, getAvatar } from '../../services/profileService';
 
 export const uploadAvatarAsync = createAsyncThunk(
   'auth/uploadAvatar',
@@ -8,7 +8,7 @@ export const uploadAvatarAsync = createAsyncThunk(
 
 export const loadAvatarAsync = createAsyncThunk(
   'auth/loadAvatar',
-  async (userId) => getAvatarUrl(userId)
+  async (userId) => getAvatar(userId)
 );
 
 const initialState = {
